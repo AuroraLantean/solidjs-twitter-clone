@@ -2,6 +2,7 @@
 
 SolidJs Ts Template: https://github.com/solidjs/templates
 TailwindCss + Solid: https://tailwindcss.com/docs/guides/solidjs
+Solid Icon: https://solid-icons.vercel.app/
 
 Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
 
