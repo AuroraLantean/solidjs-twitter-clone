@@ -1,0 +1,81 @@
+import { Component, createEffect, createSignal, onCleanup, onMount, Show } from "solid-js";
+import { Portal } from "solid-js/web";
+import pageSize from "../../reactive/pageSize";
+
+type Props = {
+  opener: Component;
+}
+const MenuButton: Component<Props> = ({ opener: Opener }) => {
+  const [isOpen, setIsOpen] = createSignal();
+
+  let button!: HTMLDivElement;// followTo
+  let popup!: HTMLDivElement;
+
+  onMount(() => {
+    window.addEventListener("click", closePopup);
+  })
+
+  onCleanup(() => {
+    window.removeEventListener("click", closePopup);
+  })
+
+  const isPopupClicked = (e: MouseEvent) => {
+    return popup?.contains(e.target as Node);
+  }
+  const closePopup = (e: MouseEvent) => {
+    if (isOpen() && !isPopupClicked(e)) {//close popup only when it is open and not clicked on the popup
+      console.log("closePopup() > isOpen() is true");
+      setIsOpen(false);
+    }
+  }
+
+  createEffect(() => {
+    if (isOpen() && pageSize.getter()) {
+      adjustPopup();
+    }
+  })
+
+  const adjustPopup = () => {
+    console.log("adjustPopup");
+    if (!!popup) {//if popup is undefined, !! turns it into false
+      const position = button.getBoundingClientRect();
+      popup.style.left = position.left + "px";
+      popup.style.bottom = button.clientHeight + "px";
+      //debugger
+      //console.log(button);
+      //console.log(popup);
+    }
+  }
+
+  return (
+    <div class="flex-it flex-grow">
+      <div
+        ref={button}
+        //onClick={() => setIsOpen(!isOpen())
+        onclick={(e) => {
+          e.stopImmediatePropagation();
+          setIsOpen(!isOpen())
+        }
+        }>
+        <Opener />
+      </div>
+
+      <Show when={isOpen()}>
+        <Portal mount={document.getElementById("popups") as Node}>
+          <div
+            ref={popup}
+            class="flex-it hover:cursor-pointer fixed bg-gray-800 text-white popup z-10 rounded-2xl border-gray-700 border transition duration-1000">
+            <div class="w-72 min-w-68 max-h-120 min-h-8 flex-it overflow-auto">
+              <div class="flex-it flex-grow flex-shrink py-3">
+                <div class="flex-it px-4 py-3 transition hover:bg-gray-700">Logout</div>
+              </div>
+            </div>
+          </div>
+        </Portal>
+      </Show>
+
+    </div>
+  )
+}
+
+export default MenuButton;

@@ -47,7 +47,10 @@ const App: Component = () => {
   });
 
   return (
-    <AppRoutes />
+    <>
+      <div id="popups" />
+      <AppRoutes />
+    </>
   );
 };
 /**

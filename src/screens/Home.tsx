@@ -3,13 +3,16 @@ import { FaRegularImage } from "solid-icons/fa";
 import MainLayout from "../components/layouts/Main";
 import GlidePost from "../components/glides/GlidePost";
 import { Glide } from "../types/Glide";
+import pageSize from "../reactive/pageSize";
 
 const lg = console.log;
 
 const HomeScreen: Component = () => {
   const [content, setContent] = createSignal("");
   const [glides, setGlides] = createSignal<Glide[]>([]);
-  
+
+  console.log("pageSize in HomeScreen"+JSON.stringify(pageSize.getter()));
+
   const makeGlide = () => {
     const glide = {
       id: createUniqueId(),
