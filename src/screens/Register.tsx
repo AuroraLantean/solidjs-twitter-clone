@@ -1,9 +1,36 @@
 import { A } from "@solidjs/router";
-import { Component } from "solid-js";
+import { Accessor, Component } from "solid-js";
+import useForm, { firstUppercaseLetter, maxLengthValidator }  from "../hooks/useForm";
+import { RegisterForm } from "../types/Form";
+
 
 const RegisterScreen: Component = () => {
+
+  const { handleInput, submitForm, validate } = useForm<RegisterForm>({
+    fullName: "",
+    nickName: "",
+    email: "",
+    avatar: "",
+    password: "",
+    passwordConfirmation: ""
+  });
+
+  const onKeyUpEnter = (e: KeyboardEvent) => {
+    console.log("onKeyUpEnter. e:", e);
+    //e.preventDefault();
+    if (e.key === "Enter" && !e.shiftKey) {
+      console.log("Enter detected")
+      document.getElementById("formBtn")!.click();
+      //submitForm(onFormSubmit)
+    }
+  }
+  const onFormSubmit = (form: RegisterForm) => {
+    console.log("onFormSubmit:", form);
+  }
+
   return (
     <div class="flex-it justify-center items-center h-full">
+
       <div class="text-white text-4xl font-bold">Glider - Create Account</div>
       <div class="mt-10 flex-it h-100 xs:w-100 w-full bg-white p-10 rounded-2xl">
         <div class="flex-it">
@@ -16,6 +43,8 @@ const RegisterScreen: Component = () => {
                       Full Name
                     </label>
                     <input
+                      onInput={handleInput}
+                      use:validate={[maxLengthValidator, firstUppercaseLetter]}
                       type="text"
                       name="fullName"
                       id="fullName"
@@ -31,6 +60,8 @@ const RegisterScreen: Component = () => {
                       Nick Name
                     </label>
                     <input
+                      onInput={handleInput}
+                      use:validate={[maxLengthValidator]}
                       type="text"
                       name="nickName"
                       id="nickName"
@@ -43,6 +74,7 @@ const RegisterScreen: Component = () => {
                       Email
                     </label>
                     <input
+                      onInput={handleInput}
                       type="text"
                       name="email"
                       id="email"
@@ -55,6 +87,7 @@ const RegisterScreen: Component = () => {
                       Avatar
                     </label>
                     <input
+                      onInput={handleInput}
                       type="text"
                       name="avatar"
                       id="avatar"
@@ -67,6 +100,7 @@ const RegisterScreen: Component = () => {
                       Password
                     </label>
                     <input
+                      onInput={handleInput}
                       type="password"
                       name="password"
                       id="password"
@@ -79,6 +113,8 @@ const RegisterScreen: Component = () => {
                       Password Confirmation
                     </label>
                     <input
+                      onInput={handleInput}
+                      onkeyup={(e) => onKeyUpEnter(e)}
                       type="password"
                       name="passwordConfirmation"
                       id="passwordConfirmation"
@@ -95,6 +131,8 @@ const RegisterScreen: Component = () => {
               </div>
               <div class="flex-it py-2">
                 <button
+                  id="formBtn"
+                  onClick={submitForm(onFormSubmit)}
                   type="button"
                   class="
                   bg-blue-400 hover:bg-blue-500 focus:ring-0

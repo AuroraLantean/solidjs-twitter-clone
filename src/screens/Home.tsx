@@ -1,6 +1,6 @@
-import { Component, createSignal, createUniqueId, For, onCleanup, onMount, Show } from "solid-js";
+import { Component, createSignal, createUniqueId, For } from "solid-js";
 import { FaRegularImage } from "solid-icons/fa";
-import MainLayout from "../components/layouts/Main";
+import MainLayout from "./MainLayout";
 import GlidePost from "../components/glides/GlidePost";
 import { Glide } from "../types/Glide";
 import pageSize from "../reactive/pageSize";
@@ -59,7 +59,7 @@ const HomeScreen: Component = () => {
                 //lg("hi there:", e.currentTarget.value);
                 setContent(e.currentTarget.value)
               }}
-              onkeypress={(e) => {
+              onkeyup={(e) => {
                 //lg("onkeypress", e)
                 if (e.key === "Enter" && !e.shiftKey) {
                   //e.preventDefault();

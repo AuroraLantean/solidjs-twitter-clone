@@ -44,7 +44,7 @@ const LoginScreen: Component = () => {
               <div class="text-sm text-gray-600 pb-4">
                 No Account Yet?{" "}
                 <A class="underline" href="/auth/register">
-                  Create a new account
+                  Singup a new account
                 </A>
               </div>
               <div class="flex-it py-2">

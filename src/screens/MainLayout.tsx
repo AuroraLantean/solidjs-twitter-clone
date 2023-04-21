@@ -1,6 +1,6 @@
 import { ParentComponent } from "solid-js";
-import Menu from "../Menu";
-import Trends from "../Trends";
+import Menu from "../components/Menu";
+import Trends from "../components/Trends";
 
 const MainLayout: ParentComponent = (props) => {
   return (
