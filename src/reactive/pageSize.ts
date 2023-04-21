@@ -14,14 +14,12 @@ const pageSize = () => {
     console.log("handleResize:", getter());
   }
   onMount(() => {
-    console.log("INITIALIZING PAGESIZE!!!!!!");
+    console.log("INITIALIZING PAGESIZE");
     window.addEventListener("resize", handleResize);
   })
-  console.log("pageSize2")
   onCleanup(() => {
     console.log("pageSize onCleanup")
   })
-  console.log("pageSize3")
 
   const isXl = () => getter().width > 1280;
   const isLg = () => getter().width > 1024;

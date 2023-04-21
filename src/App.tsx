@@ -1,7 +1,5 @@
 import { Component, createEffect, createResource, createSignal } from 'solid-js';
-import HomeScreen from './screens/Home';
-import LoginScreen from './screens/Login';
-import RegisterScreen from './screens/Register';
+//import { useAuthState } from "./context/auth";
 import AppRoutes from "./router";
 //import {useParams} from 'solid-start';
 
@@ -34,6 +32,7 @@ const fetchData = async (value: number) => {
 const App: Component = () => {
   const [counter, setCounter] = createSignal(0);
   const doubleCounter = () => counter() * 2;
+  //const authState = useAuthState()!;
 
   /* everyting here run only ONCE!*/
   // setInterval(() => {
@@ -55,6 +54,15 @@ const App: Component = () => {
 };
 /**
 <>
+      <div class="text-white">
+        <div>
+          Is Authenticated: {`${authState.isAuthenticated}`}
+        </div>
+        <div>
+          Is Loading: {`${authState.loading}`}
+        </div>
+      </div>
+
       <h1 class="text-3xl font-bold underline">Hello World</h1>
       <p id="counter"> {counter()} </p>
       <p id="doublecounter"> {doubleCounter()} </p>

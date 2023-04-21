@@ -4,6 +4,7 @@ import MainLayout from "../components/layouts/Main";
 import GlidePost from "../components/glides/GlidePost";
 import { Glide } from "../types/Glide";
 import pageSize from "../reactive/pageSize";
+import { useAuthState } from "../context/auth";
 
 const lg = console.log;
 
@@ -12,6 +13,11 @@ const HomeScreen: Component = () => {
   const [glides, setGlides] = createSignal<Glide[]>([]);
 
   console.log("pageSize in HomeScreen"+JSON.stringify(pageSize.getter()));
+  
+  const authState = useAuthState()!;
+  console.log("HomeScreen: isAuthenticated:" + authState.isAuthenticated);
+  console.log("HomeScreen: IsLoading:" + authState.loading);
+
 
   const makeGlide = () => {
     const glide = {
