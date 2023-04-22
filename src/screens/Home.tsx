@@ -1,4 +1,5 @@
 import { Component, createSignal, createUniqueId, For } from "solid-js";
+import { createStore, produce } from "solid-js/store";
 import { FaRegularImage } from "solid-icons/fa";
 import MainLayout from "./MainLayout";
 import GlidePost from "../components/glides/GlidePost";
@@ -10,7 +11,9 @@ const lg = console.log;
 
 const HomeScreen: Component = () => {
   const [content, setContent] = createSignal("");
-  const [glides, setGlides] = createSignal<Glide[]>([]);
+  const [glides, setGlides] = createStore({
+    items: [] as Glide[]
+  });
 
   console.log("pageSize in HomeScreen"+JSON.stringify(pageSize.getter()));
   
@@ -20,6 +23,7 @@ const HomeScreen: Component = () => {
 
 
   const makeGlide = () => {
+    console.log("makeGlide():", content())
     const glide = {
       id: createUniqueId(),
       content: content(),
@@ -31,9 +35,14 @@ const HomeScreen: Component = () => {
       subglidesCount: 0,
       date: new Date()
     }
-    setGlides([glide, ...glides()]);
+
+    setGlides("items", produce((items) => {
+      //items.push(glide);
+      items.unshift(glide);
+    }));
+
     setContent("");
-    lg(JSON.stringify(glides()));
+    //lg(JSON.stringify(glides()));
   }
 
 
@@ -102,7 +111,7 @@ const HomeScreen: Component = () => {
       <div class="h-px bg-gray-700 my-1" />
 
       {/* GlidePosts */}
-      <For each={glides()}>
+      <For each={glides.items}>
         {(glide) =>
           <GlidePost glide={glide}/>
         }
