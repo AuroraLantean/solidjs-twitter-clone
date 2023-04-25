@@ -1,11 +1,12 @@
 import { A } from "@solidjs/router";
-import { Accessor, Component, Show } from "solid-js";
-import useForm, { FormError, compareWith, firstUppercaseLetter, maxLengthValidator, minLengthValidator, requiredValidator } from "../hooks/useForm";
+import { Component, onMount } from "solid-js";
+import useForm, { FormError, compareWith, firstUppercaseLetter, minLengthValidator, requiredValidator } from "../hooks/useForm";
 import { RegisterForm } from "../types/Form";
-
+import useRegister from "../hooks/useRegister";
+import { getUsers } from "../db";
 
 const RegisterScreen: Component = () => {
-
+  const {register} = useRegister()
   const { handleInput, submitForm, validate, errors } = useForm<RegisterForm>({
     fullName: "",
     nickName: "",
@@ -14,6 +15,11 @@ const RegisterScreen: Component = () => {
     password: "",
     passwordConfirmation: ""
   });
+  
+  onMount(async () => {
+    const users = await getUsers();
+    console.log("users:", users);
+  })
 
   const onKeyUpEnter = (e: KeyboardEvent) => {
     //console.log("onKeyUpEnter. e:", e);
@@ -26,6 +32,7 @@ const RegisterScreen: Component = () => {
   }
   const onFormSubmit = (form: RegisterForm) => {
     console.log("onFormSubmit:", form);
+    register(form);
   }
 
   return (

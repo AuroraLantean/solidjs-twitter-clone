@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@solidjs/router": "^0.8.2",
+    "firebase": "^9.20.0",
     "solid-icons": "^1.0.4",
     "solid-js": "^1.7.3"
   }

@@ -159,7 +159,7 @@ const useForm = <T extends Form>(initialForm: T) => {
     //console.log(ref);
   }
   const checkValidity = ({element, validators}: ValidatorConfig) => () => {
-    console.log("checkValidity");
+    //console.log("checkValidity");
     setErrors(element.name, []);
 
     for (const validator of validators) {
@@ -175,7 +175,7 @@ const useForm = <T extends Form>(initialForm: T) => {
       //   setErrors(element.name, "");
       // }
     }
-    console.log(JSON.stringify(errors));
+    //console.log(JSON.stringify(errors));
   }
 
 
