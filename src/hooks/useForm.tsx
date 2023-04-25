@@ -11,7 +11,21 @@ declare module "solid-js" {
   }
 }
 
-type Validator = (element: HTMLInputElement, ...rest: any[]) => string;
+type Validator = (element: HTMLInputElement, ...rest: any[]) => (form: Form) => string;
+type ValidatorConfig = {element: HTMLInputElement, validators: Validator[]};
+
+const niceName = (text: string) => {
+  const words = text.split(/(?=[A-Z])/);
+
+  return (words.map((word, i) => {
+    // if (i === 0) {
+    //   return word[0].toUpperCase() + word.substring(1);
+    // }
+    // return word.toLowerCase();
+    return word[0].toUpperCase() + word.substring(1);
+  })).join(" ");
+}
+
 
 export const FormError: ParentComponent = (props) => {
   const mesgs = () => props.children as string[] || [];
@@ -31,37 +45,46 @@ export const FormError: ParentComponent = (props) => {
   )
 }
 
-export const requiredValidator: Validator = (element: HTMLInputElement) => {
-  return element.value.length === 0 ?
-    `${element.name} is required` : "";
+export const compareWith: Validator = (element: HTMLInputElement, tofieldName: string) => (form: Form) => {
+  if (element.value.length === 0) { return ""};
+
+  const compareToValue = form[tofieldName];
+  return element.value !== compareToValue ? 
+  `${niceName(element.name)} should be same as ${niceName(tofieldName)}` : "";
 }
 
-export const minLengthValidator: Validator = (element: HTMLInputElement, minLength = 7) => {
+export const requiredValidator: Validator = (element: HTMLInputElement) => (form: Form) => {
+  console.log("form:", form)
+  return element.value.length === 0 ?
+    `${niceName(element.name)} is required` : "";
+}
+
+export const minLengthValidator: Validator = (element: HTMLInputElement, minLength = 7) => (form: Form) => {
   if (
     element.value.length === 0 ||
     element.value.length > minLength
     ) { return ""; }
 
-  return `${element.name} should be more than ${minLength} characters`;
+  return `${niceName(element.name)} should be more than ${minLength} characters`;
 }
 
-export const maxLengthValidator: Validator = (element: HTMLInputElement, maxLength = 7) => {
+export const maxLengthValidator: Validator = (element: HTMLInputElement, maxLength = 7) => (form: Form) => {
   if (
     element.value.length === 0 ||
     element.value.length < maxLength
   ) { return ""; }
 
-  return `${element.name} should be less than ${maxLength} characters`;
+  return `${niceName(element.name)} should be less than ${maxLength} characters`;
 }
 
 
-export const firstUppercaseLetter = (element: HTMLInputElement) => {
+export const firstUppercaseLetter = (element: HTMLInputElement) => (form: Form) => {
   const { value } = element;
 
   if (value.length === 0) { return ""; }
 
   return value[0] !== value[0].toLocaleUpperCase() ?
-    `${element.name} first letter should be uppercased` : "";
+    `${niceName(element.name)} first letter should be uppercased` : "";
 }
 
 
@@ -70,6 +93,18 @@ const useForm = <T extends Form>(initialForm: T) => {
 
   const [errors, setErrors] = createStore<FormErrors>();
   //errors are key-value pairs
+  const validatorFields: {[key: string]: ValidatorConfig} = {};
+
+  const isValid = () => {
+    const keys = Object.keys(errors);
+    if (keys.length === 0) {
+      return false;
+    }
+    //if there is any error, return false
+    return !keys.some(errorKey => {
+      return errors[errorKey].length > 0;
+    });
+  } 
 
   const handleInput = (e: GliderInputEvent) => {
     const { name, value } = e.currentTarget;
@@ -88,7 +123,16 @@ const useForm = <T extends Form>(initialForm: T) => {
   //a function to return a function
   const submitForm = (submitCallback: SubmitCallback<T>) => () => {
     console.log("submitForm:", form);
-    submitCallback(form);
+    for (const field in validatorFields) {
+      const config = validatorFields[field];
+      checkValidity(config)();
+    }
+    if (isValid()) {
+      console.log("all validators passed")
+      submitCallback(form);
+    } else {
+      console.log("the form has error")
+    }
   }
 
   const validate = (ref: HTMLInputElement, accessor: Accessor<Validator[]>) => {
@@ -100,20 +144,26 @@ const useForm = <T extends Form>(initialForm: T) => {
     // ref.onblur = () => {
     //   console.log("On Blur!");
     // }
-    ref.onblur = checkValidity(ref, validators)
+    let config: ValidatorConfig;
+    //debugger //confirm devtool > Sources > local: ref and validators > click on triangle button or F8 > type "validatorFields" in the console to see more fields are added as you click on the triangle button button
+    validatorFields[ref.name] = config = {element: ref, validators};
 
+    ref.onblur = checkValidity(config);
+    ref.oninput = () => {
+      if (!errors[ref.name]) { return; }
+      checkValidity(config)();
+    }
     // ref.oninput = () => {
     //   console.log("On Input!");
     // }
     //console.log(ref);
   }
-
-  const checkValidity = (element: HTMLInputElement, validators: Validator[]) => () => {
+  const checkValidity = ({element, validators}: ValidatorConfig) => () => {
     console.log("checkValidity");
     setErrors(element.name, []);
 
     for (const validator of validators) {
-      const message = validator(element);
+      const message = validator(element)(form);
 
       if (!!message) {
         setErrors(produce(errors => {

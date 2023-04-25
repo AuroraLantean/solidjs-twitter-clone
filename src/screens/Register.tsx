@@ -1,6 +1,6 @@
 import { A } from "@solidjs/router";
 import { Accessor, Component, Show } from "solid-js";
-import useForm, { FormError, firstUppercaseLetter, maxLengthValidator, minLengthValidator, requiredValidator } from "../hooks/useForm";
+import useForm, { FormError, compareWith, firstUppercaseLetter, maxLengthValidator, minLengthValidator, requiredValidator } from "../hooks/useForm";
 import { RegisterForm } from "../types/Form";
 
 
@@ -16,7 +16,7 @@ const RegisterScreen: Component = () => {
   });
 
   const onKeyUpEnter = (e: KeyboardEvent) => {
-    console.log("onKeyUpEnter. e:", e);
+    //console.log("onKeyUpEnter. e:", e);
     //e.preventDefault();
     if (e.key === "Enter" && !e.shiftKey) {
       console.log("Enter detected")
@@ -119,7 +119,10 @@ const RegisterScreen: Component = () => {
                     </label>
                     <input
                       onInput={handleInput}
-                      use: validate={[requiredValidator]}
+                      use:validate={[
+                        requiredValidator,
+                        (ele) => compareWith(ele, "password")
+                      ]}
                       onkeyup={(e) => onKeyUpEnter(e)}
                       type="password"
                       name="passwordConfirmation"
