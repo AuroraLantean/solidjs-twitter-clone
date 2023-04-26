@@ -6,7 +6,7 @@ import useRegister from "../hooks/useRegister";
 import { getUsers } from "../db";
 
 const RegisterScreen: Component = () => {
-  const {register} = useRegister()
+  const {registerUser} = useRegister()
   const { handleInput, submitForm, validate, errors } = useForm<RegisterForm>({
     fullName: "",
     nickName: "",
@@ -20,7 +20,10 @@ const RegisterScreen: Component = () => {
     const users = await getUsers();
     console.log("users:", users);
   })
-
+  const onFormSubmit = (form: RegisterForm) => {
+    console.log("onFormSubmit:", form);
+    registerUser(form);
+  }
   const onKeyUpEnter = (e: KeyboardEvent) => {
     //console.log("onKeyUpEnter. e:", e);
     //e.preventDefault();
@@ -29,10 +32,6 @@ const RegisterScreen: Component = () => {
       document.getElementById("formBtn")!.click();
       //submitForm(onFormSubmit)
     }
-  }
-  const onFormSubmit = (form: RegisterForm) => {
-    console.log("onFormSubmit:", form);
-    register(form);
   }
 
   return (

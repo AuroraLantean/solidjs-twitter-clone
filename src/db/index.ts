@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { collection, getDocs, getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
-// Your web app's Firebase configuration
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCyY75pD0JZX0-mv51g_CEV_WsbBhCeql8",
   authDomain: "glider-d5798.firebaseapp.com",
@@ -13,9 +13,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const firebaseAuth = getAuth(app);
+export const conn = initializeApp(firebaseConfig);
+export const db = getFirestore(conn);
+export const firebaseAuth = getAuth(conn);
 
 export const getUsers = async () => {
   const usersCol = collection(db, "users");
