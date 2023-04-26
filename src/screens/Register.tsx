@@ -2,11 +2,11 @@ import { A } from "@solidjs/router";
 import { Component, onMount } from "solid-js";
 import useForm, { FormError, compareWith, firstUppercaseLetter, minLengthValidator, requiredValidator } from "../hooks/useForm";
 import { RegisterForm } from "../types/Form";
-import useRegister from "../hooks/useRegister";
+import useAuth from "../hooks/useAuth";
 import { getUsers } from "../db";
 
 const RegisterScreen: Component = () => {
-  const {registerUser} = useRegister()
+  const {authUser, loading} = useAuth("register")
   const { handleInput, submitForm, validate, errors } = useForm<RegisterForm>({
     fullName: "",
     nickName: "",
@@ -22,7 +22,7 @@ const RegisterScreen: Component = () => {
   })
   const onFormSubmit = (form: RegisterForm) => {
     console.log("onFormSubmit:", form);
-    registerUser(form);
+    authUser(form);
   }
   const onKeyUpEnter = (e: KeyboardEvent) => {
     //console.log("onKeyUpEnter. e:", e);
@@ -148,6 +148,7 @@ const RegisterScreen: Component = () => {
               <div class="flex-it py-2">
                 <button
                   id="formBtn"
+                  disabled={loading()}
                   onClick={submitForm(onFormSubmit)}
                   type="button"
                   class="
