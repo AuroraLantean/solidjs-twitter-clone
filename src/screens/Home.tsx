@@ -6,10 +6,13 @@ import GlidePost from "../components/glides/GlidePost";
 import { Glide } from "../types/Glide";
 import pageSize from "../reactive/pageSize";
 import { useAuthState } from "../context/auth";
+import { useUIDispatch } from "../context/ui";
 
 const lg = console.log;
 
 const HomeScreen: Component = () => {
+  const { user } = useAuthState()!;
+  const {addSnackbar} = useUIDispatch();
   const [content, setContent] = createSignal("");
   const [glides, setGlides] = createStore({
     items: [] as Glide[]
@@ -36,11 +39,11 @@ const HomeScreen: Component = () => {
       date: new Date()
     }
 
-    setGlides("items", produce((items) => {
-      //items.push(glide);
-      items.unshift(glide);
-    }));
-
+    // setGlides("items", produce((items) => {
+    //   //items.push(glide);
+    //   items.unshift(glide);
+    // }));
+    addSnackbar({message: "Glide Added!", type: "success"});
     setContent("");
     //lg(JSON.stringify(glides()));
   }
@@ -55,7 +58,7 @@ const HomeScreen: Component = () => {
           <div class="w-12 h-12 overflow-visible cursor-pointer transition duration-200 hover:opacity-80">
             <img
               class="rounded-full"
-              src="https://www.pinclipart.com/picdir/middle/133-1331433_free-user-avatar-icons-happy-flat-design-png.png"
+              src={user?.avatar}
             ></img>
           </div>
         </div>

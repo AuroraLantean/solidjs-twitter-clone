@@ -30,3 +30,8 @@ Your app is ready to be deployed!
 ## Deployment
 
 You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
+
+## Demo
+Avatar:
+https://thrangra.sirv.com/Avatar1.png
+https://thrangra.sirv.com/Avatar2.png

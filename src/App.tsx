@@ -1,5 +1,5 @@
 import { Component, createEffect, createResource, createSignal } from 'solid-js';
-//import { useAuthState } from "./context/auth";
+import SnackbarContainer from "./components/snackbar/Container";
 import AppRoutes from "./router";
 //import {useParams} from 'solid-start';
 
@@ -48,6 +48,7 @@ const App: Component = () => {
   return (
     <>
       <div id="popups" />
+      <SnackbarContainer />
       <AppRoutes />
     </>
   );

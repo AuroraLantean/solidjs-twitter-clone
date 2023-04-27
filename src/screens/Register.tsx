@@ -51,6 +51,7 @@ const RegisterScreen: Component = () => {
                     <input
                       onInput={handleInput}
                       use: validate={[requiredValidator, minLengthValidator, firstUppercaseLetter]}
+                      value={"Leonardo DiCaprio1"}
                       type="text"
                       name="fullName"
                       id="fullName"
@@ -66,6 +67,7 @@ const RegisterScreen: Component = () => {
                     <input
                       onInput={handleInput}
                       use: validate={[requiredValidator, (ele) => minLengthValidator(ele, 4)]}
+                      value={"Leod1"}
                       type="text"
                       name="nickName"
                       id="nickName"
@@ -81,6 +83,7 @@ const RegisterScreen: Component = () => {
                     <input
                       onInput={handleInput}
                       use: validate={[requiredValidator]}
+                      value={"leonardo@gmail.com1"}
                       type="text"
                       name="email"
                       id="email"
@@ -96,6 +99,7 @@ const RegisterScreen: Component = () => {
                     <input
                       onInput={handleInput}
                       use: validate={[requiredValidator]}
+                      value={"https://thrangra.sirv.com/Avatar1.png1"}
                       type="text"
                       name="avatar"
                       id="avatar"
@@ -111,6 +115,7 @@ const RegisterScreen: Component = () => {
                     <input
                       onInput={handleInput}
                       use: validate={[requiredValidator]}
+                      value={"aaaaaaa"}
                       type="password"
                       name="password"
                       id="password"
@@ -129,6 +134,7 @@ const RegisterScreen: Component = () => {
                         requiredValidator,
                         (ele) => compareWith(ele, "password")
                       ]}
+                      value={"aaaaaaa"}
                       onkeyup={(e) => onKeyUpEnter(e)}
                       type="password"
                       name="passwordConfirmation"

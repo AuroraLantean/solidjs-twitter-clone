@@ -49,12 +49,13 @@ export const compareWith: Validator = (element: HTMLInputElement, tofieldName: s
   if (element.value.length === 0) { return ""};
 
   const compareToValue = form[tofieldName];
+  console.log("ele value:", element.value, ", compareToValue:", compareToValue)
   return element.value !== compareToValue ? 
   `${niceName(element.name)} should be same as ${niceName(tofieldName)}` : "";
 }
 
 export const requiredValidator: Validator = (element: HTMLInputElement) => (form: Form) => {
-  console.log("form:", form)
+  console.log("requiredValidator: form:", form)
   return element.value.length === 0 ?
     `${niceName(element.name)} is required` : "";
 }
@@ -62,7 +63,7 @@ export const requiredValidator: Validator = (element: HTMLInputElement) => (form
 export const minLengthValidator: Validator = (element: HTMLInputElement, minLength = 7) => (form: Form) => {
   if (
     element.value.length === 0 ||
-    element.value.length > minLength
+    element.value.length >= minLength
     ) { return ""; }
 
   return `${niceName(element.name)} should be more than ${minLength} characters`;
@@ -71,7 +72,7 @@ export const minLengthValidator: Validator = (element: HTMLInputElement, minLeng
 export const maxLengthValidator: Validator = (element: HTMLInputElement, maxLength = 7) => (form: Form) => {
   if (
     element.value.length === 0 ||
-    element.value.length < maxLength
+    element.value.length <= maxLength
   ) { return ""; }
 
   return `${niceName(element.name)} should be less than ${maxLength} characters`;
@@ -108,6 +109,7 @@ const useForm = <T extends Form>(initialForm: T) => {
 
   const handleInput = (e: GliderInputEvent) => {
     const { name, value } = e.currentTarget;
+    console.log("handleInput", name, value);
     setForm(
       name as any,
       value as any

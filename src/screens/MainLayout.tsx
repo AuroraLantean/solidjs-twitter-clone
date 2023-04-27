@@ -1,5 +1,5 @@
 import { ParentComponent } from "solid-js";
-import Menu from "../components/Menu";
+import SideMenu from "../components/SideMenu";
 import Trends from "../components/Trends";
 
 const MainLayout: ParentComponent = (props) => {
@@ -7,7 +7,7 @@ const MainLayout: ParentComponent = (props) => {
     <div class="w-full h-full bg-gray-900 text-gray-100">
       <div class="flex h-full min-h-252">
         {/* SIDEBAR START */}
-        <Menu />
+        <SideMenu />
         {/* SIDEBARS END */}
         <main class="flex-it flex-grow flex-shrink items-start">
           <div class="flex md:w-248 w-full h-full">
