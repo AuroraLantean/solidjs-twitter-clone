@@ -1,22 +1,40 @@
 import { Component, For } from "solid-js";
-import { createStore } from "solid-js/store";
 import MainLayout from "./MainLayout";
 import GlidePost from "../components/glides/GlidePost";
-import { Glide } from "../types/Glide";
 import pageSize from "../reactive/pageSize";
 import Messenger from "../components/utils/Messenger";
+import useGlides from "../hooks/useGlides";
 
 const lg = console.log;
 
 const HomeScreen: Component = () => {
-  //const {addSnackbar} = useUIDispatch();
-  //const [content, setContent] = createSignal("");
-  const [glides, setGlides] = createStore({
+  /*const [glides, setGlides] = createStore({
     items: [] as Glide[]
-  });
+  });*/
+  const {store, addGlideToFirst, page} = useGlides();
 
   console.log("HomeScreen pageSize" + JSON.stringify(pageSize.getter()));
 
+  return (
+    <MainLayout>
+      <Messenger onGlideAdded={addGlideToFirst} />
+      <div class="h-px bg-gray-700 my-1" />
+
+      {/* GlidePosts */}
+      <For each={Array.from({length: page()})}>
+        {(_, i) =>
+          <For each={store.pages[i() + 1]?.glides}>
+            { (glide) =>
+              <GlidePost glide={glide} />
+            }
+          </For>
+        }
+      </For>
+    </MainLayout>
+  );
+};
+
+export default HomeScreen;
   /*const makeGlide = () => {
     console.log("makeGlide():", content())
     const glide = {
@@ -38,24 +56,6 @@ const HomeScreen: Component = () => {
     setContent("");
     //lg(JSON.stringify(glides()));
   }*/
-
-
-  return (
-    <MainLayout>
-      <Messenger />
-      <div class="h-px bg-gray-700 my-1" />
-
-      {/* GlidePosts */}
-      <For each={glides.items}>
-        {(glide) =>
-          <GlidePost glide={glide} />
-        }
-      </For>
-    </MainLayout>
-  );
-};
-
-export default HomeScreen;
 /**
   const [displayContent, setDisplayContent] = createSignal(false);
 

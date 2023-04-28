@@ -1,9 +1,14 @@
 import { FaRegularImage } from "solid-icons/fa";
+import { Component } from "solid-js";
 import { useAuthState } from "../../context/auth";
 import useMessenger from "../../hooks/useMessenger";
 import { GliderInputEvent } from "../../types/Form";
+import { Glide } from "../../types/Glide";
 
-const Messenger = () => {
+type Props = {
+  onGlideAdded: (g: Glide) => void
+}
+const Messenger: Component<Props> = (props) => {
   const { isAuthenticated, loading, user } = useAuthState()!;
   const { handleInput, handleSubmit, form } = useMessenger();
 
@@ -11,19 +16,22 @@ const Messenger = () => {
     const el = e.currentTarget;
     //console.log("autosize el:", el)
     el.style.height = "0px";
-    const {scrollHeight} = el;
+    const { scrollHeight } = el;
     el.style.height = scrollHeight + "px";
   }
 
   console.log("Messenger: isAuthenticated:" + isAuthenticated);
   console.log("Messenger: IsLoading:" + loading);
-  /**   <textarea
-          value={content()}
-          oninput={(e) => {
-            //lg("hi there:", e.currentTarget.value);
-            setContent(e.currentTarget.value)
-          }}
-   */
+
+  //e.currentTarget.value
+  const onKeyUpEnter = (e: KeyboardEvent) => {
+    //console.log("onKeyUpEnter. e:", e);
+    if (e.key === "Enter" && !e.shiftKey) {
+      console.log("Enter detected")
+      document.getElementById("addGlideBtn")!.click();
+    }
+  }
+
   return (
     <div class="flex-it py-1 px-4 flex-row">
       <div class="flex-it mr-4">
@@ -43,14 +51,7 @@ const Messenger = () => {
               handleInput(e);
               autosize(e)
             }}
-            onkeyup={(e) => {
-              //lg("onkeypress", e)
-              if (e.key === "Enter" && !e.shiftKey) {
-                //e.preventDefault();
-                //lg("enter detected");
-                handleSubmit();
-              }
-            }}
+            onkeyup={(e) => onKeyUpEnter(e)}
             name="content"
             rows="1"
             id="glide"
@@ -67,7 +68,11 @@ const Messenger = () => {
           </div>
           <div class="flex-it w-32 mt-3 cursor-pointer">
             <button
-              onClick={handleSubmit}
+              id="addGlideBtn"
+              onClick={async () => {
+                const glide = await handleSubmit();
+                if (!!glide) props.onGlideAdded(glide);
+              }}
               type="button"
               class="
                         disabled:cursor-not-allowed disabled:bg-gray-400
