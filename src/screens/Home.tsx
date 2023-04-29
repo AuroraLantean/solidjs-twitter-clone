@@ -4,6 +4,7 @@ import GlidePost from "../components/glides/GlidePost";
 import pageSize from "../reactive/pageSize";
 import Messenger from "../components/utils/Messenger";
 import useGlides from "../hooks/useGlides";
+import PaginatedGlides from "../components/glides/PaginatedGlides";
 
 const lg = console.log;
 
@@ -11,7 +12,7 @@ const HomeScreen: Component = () => {
   /*const [glides, setGlides] = createStore({
     items: [] as Glide[]
   });*/
-  const {store, addGlideToFirst, page} = useGlides();
+  const {store, addGlideToFirst, page, loadGlides} = useGlides();
 
   console.log("HomeScreen pageSize" + JSON.stringify(pageSize.getter()));
 
@@ -20,16 +21,12 @@ const HomeScreen: Component = () => {
       <Messenger onGlideAdded={addGlideToFirst} />
       <div class="h-px bg-gray-700 my-1" />
 
-      {/* GlidePosts */}
-      <For each={Array.from({length: page()})}>
-        {(_, i) =>
-          <For each={store.pages[i() + 1]?.glides}>
-            { (glide) =>
-              <GlidePost glide={glide} />
-            }
-          </For>
-        }
-      </For>
+      <PaginatedGlides 
+        page={page}
+        pages={store.pages}
+        loading={store.loading}
+        loadMoreGlides={loadGlides}
+      />
     </MainLayout>
   );
 };

@@ -1,19 +1,21 @@
-import { addDoc, collection, doc, DocumentReference, getDoc, getDocs,  limit, orderBy, query, Timestamp } from "firebase/firestore";
+import { addDoc, collection, doc, DocumentReference, getDoc, getDocs,  limit, orderBy, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, startAfter, Timestamp } from "firebase/firestore";
 import { db } from "../db";
 import { Glide } from "../types/Glide";
 import { User } from "../types/User";
 
-const getGlides = async () => {
-  const constraints = [
+const getGlides = async (lastGlide: QueryDocumentSnapshot | null) => {
+  const constraints: QueryConstraint[] = [
     orderBy("date", "desc"),
     limit(10)
   ]
-  /*if (conditions){
-    constraints.push(...)
-  }*/
+  if (!!lastGlide) {
+    constraints.push(startAfter(lastGlide));
+  }//this constraint will cause query to return an empty array when the last item has been reached. The lastGlide of an empty array will be undefined, which should be used to stop further loading
+
   const q = query(collection(db, "glides"), ...constraints);
   //doc(db, "glides", "glide_id")
   const qSnapshot = await getDocs(q);
+  const _lastGlide = qSnapshot.docs[qSnapshot.docs.length - 1];
 
   const glides = await Promise.all(qSnapshot.docs.map(async doc => {
     const glide = doc.data() as Glide;
@@ -22,7 +24,7 @@ const getGlides = async () => {
 
     return {...glide, id: doc.id};
   }))
-  return {glides};
+  return {glides, lastGlide: _lastGlide};
 }
 
 const createGlide = async (form: {
