@@ -4,6 +4,7 @@ import { lazy } from "solid-js";
 import HomeScreen from "../screens/Home";
 import MainMidway from "./MainMidway";
 import AuthMidway from "./AuthMidway";
+import ProfileScreen from "../screens/Profile";
 
 const LoginScreen = lazy(() => import("../screens/Login"));
 const RegisterScreen = lazy(() => import("../screens/Register"));
@@ -17,6 +18,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" component={MainMidway}>
         <Route path="" component={HomeScreen} />
+        <Route path="profile" component={ProfileScreen} />
       </Route>
 
       <Route path="/auth" component={AuthMidway}>

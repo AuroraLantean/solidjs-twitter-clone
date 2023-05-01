@@ -17,7 +17,7 @@ const HomeScreen: Component = () => {
   console.log("HomeScreen pageSize" + JSON.stringify(pageSize.getter()));
 
   return (
-    <MainLayout>
+    <MainLayout pageTitle="Home">
       <Messenger onGlideAdded={addGlideToFirst} />
       <div class="h-px bg-gray-700 my-1" />
 
