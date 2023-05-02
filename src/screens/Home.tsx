@@ -12,16 +12,19 @@ const HomeScreen: Component = () => {
   /*const [glides, setGlides] = createStore({
     items: [] as Glide[]
   });*/
-  const {store, addGlideToFirst, page, loadGlides} = useGlides();
+  const { store, addGlideToFirst, page, loadGlides, addGlide } = useGlides();
 
   console.log("HomeScreen pageSize" + JSON.stringify(pageSize.getter()));
 
   return (
-    <MainLayout pageTitle="Home">
-      <Messenger onGlideAdded={addGlideToFirst} />
+    <MainLayout
+      pageTitle="Home"
+      onGlideAdded={addGlide}
+    >
+      <Messenger onGlideAdded={addGlide} />
       <div class="h-px bg-gray-700 my-1" />
 
-      <PaginatedGlides 
+      <PaginatedGlides
         page={page}
         pages={store.pages}
         loading={store.loading}
@@ -33,26 +36,26 @@ const HomeScreen: Component = () => {
 
 export default HomeScreen;
   /*const makeGlide = () => {
-    console.log("makeGlide():", content())
-    const glide = {
-      id: createUniqueId(),
-      content: content(),
-      user: {
-        nickName: "Filip99",
-        avatar: "https://www.pinclipart.com/picdir/middle/133-1331433_free-user-avatar-icons-happy-flat-design-png.png"
-      },
-      likesCount: 0,
-      subglidesCount: 0,
-      date: new Date()
-    }
-    // setGlides("items", produce((items) => {
-    //   //items.push(glide);
-    //   items.unshift(glide);
-    // }));
-    addSnackbar({message: "Glide Added!", type: "success"});
-    setContent("");
-    //lg(JSON.stringify(glides()));
-  }*/
+  console.log("makeGlide():", content())
+  const glide = {
+    id: createUniqueId(),
+    content: content(),
+    user: {
+      nickName: "Filip99",
+      avatar: "https://www.pinclipart.com/picdir/middle/133-1331433_free-user-avatar-icons-happy-flat-design-png.png"
+    },
+    likesCount: 0,
+    subglidesCount: 0,
+    date: new Date()
+  }
+  // setGlides("items", produce((items) => {
+  //   //items.push(glide);
+  //   items.unshift(glide);
+  // }));
+  addSnackbar({message: "Glide Added!", type: "success"});
+  setContent("");
+  //lg(JSON.stringify(glides()));
+}*/
 /**
   const [displayContent, setDisplayContent] = createSignal(false);
 

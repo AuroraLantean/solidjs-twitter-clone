@@ -14,3 +14,7 @@ export interface Glide {
 is the type for:
 displayName: (lastName: string) => { return person.firstName + " " + lastName}
 */
+
+export type UserGlide = {
+  lookup: DocumentReference;
+}

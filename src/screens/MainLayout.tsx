@@ -1,16 +1,18 @@
 import { JSXElement, ParentComponent } from "solid-js";
 import SideMenu from "../components/SideMenu";
 import Trends from "../components/Trends";
+import { Glide } from "./../types/Glide";
 
 type Props = {
   pageTitle: JSXElement;
+  onGlideAdded: (glide?: Glide) => void;
 }//JSXElement can accept string and <div> elements with text inside. e.g. <div><span>Profile</span></div>
 const MainLayout: ParentComponent<Props> = (props) => {
   return (
     <div class="w-full h-full bg-gray-900 text-gray-100">
       <div class="flex h-full min-h-252">
         {/* SIDEBAR START */}
-        <SideMenu />
+        <SideMenu onGlideAdded={props.onGlideAdded} />
         {/* SIDEBARS END */}
         <main class="flex-it flex-grow flex-shrink items-start">
           <div class="flex md:w-248 w-full h-full">

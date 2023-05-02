@@ -17,10 +17,12 @@ const useMessenger = () => {
 
   const handleInput = (e: GliderInputEvent) => {
     const {name, value} = e.currentTarget;
+    //console.log("useMessager/handleInput:", name, value)
     setForm(name, value);
   }
 
   const handleSubmit = async () => {
+    console.log("handleSubmit/form:", form)
     // check if the user is authenticated
     if (!isAuthenticated) {
       addSnackbar({message: "You are not authenticated!", type: "error"});

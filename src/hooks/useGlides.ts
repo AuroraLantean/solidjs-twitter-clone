@@ -62,10 +62,25 @@ const useGlides = () => {
       store.pages[page].glides.unshift({...glide});
     }))
   }
+  
+  const addGlide = (glide: Glide | undefined) => {
+    if (!glide) return;
+
+    const page = 1;
+
+    setStore(produce(store => {
+      if (!store.pages[page]) {
+        store.pages[page] = {glides: []};
+      }
+
+      store.pages[page].glides.unshift({...glide});
+    }))
+  }
 
   return {
     page,
     loadGlides,
+    addGlide,
     addGlideToFirst,
     store
   }

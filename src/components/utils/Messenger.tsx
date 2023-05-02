@@ -71,6 +71,7 @@ const Messenger: Component<Props> = (props) => {
               id="addGlideBtn"
               onClick={async () => {
                 const glide = await handleSubmit();
+                console.log("addGlideBtn clicked. glide:" + glide)
                 if (!!glide) props.onGlideAdded(glide);
               }}
               type="button"

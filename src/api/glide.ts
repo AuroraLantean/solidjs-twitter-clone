@@ -1,6 +1,6 @@
 import { addDoc, collection, doc, DocumentReference, getDoc, getDocs,  limit, orderBy, query, QueryConstraint, QueryDocumentSnapshot, QuerySnapshot, startAfter, Timestamp } from "firebase/firestore";
 import { db } from "../db";
-import { Glide } from "../types/Glide";
+import { Glide, UserGlide } from "../types/Glide";
 import { User } from "../types/User";
 
 const getGlides = async (lastGlide: QueryDocumentSnapshot | null) => {
@@ -50,8 +50,27 @@ const createGlide = async (form: {
   //notice Glide type = {user: User | DocumentReference; ...}
 }
 
+const getGlideById = async (id: string, uid: string) => {
+  const userDocRef = doc(db, "users", uid);
+  const userGlideRef = doc(userDocRef, "glides", id);
+
+  const userGlideSnap = await getDoc(userGlideRef);
+  const userGlide = userGlideSnap.data() as UserGlide;
+  const glideSnap = await getDoc(userGlide.lookup);
+  const userDocSnap = await getDoc(userDocRef);
+ 
+  const glide = {
+    ...glideSnap.data(),
+    user: userDocSnap.data(),
+    id: glideSnap.id,
+    //lookup: glideSnap.ref.path
+  } as Glide;
+
+  return glide;
+}
 
 export {
+  getGlideById,
   createGlide,
   getGlides
 }
