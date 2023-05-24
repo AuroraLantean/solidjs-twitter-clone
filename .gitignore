@@ -3,3 +3,4 @@ dist
 archives
 css
 zz*
+src/db/index.ts
